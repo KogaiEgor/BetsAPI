@@ -1,6 +1,7 @@
-from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
+from typing import Dict
+from pydantic import BaseModel
 
 from src.api.allbets.schemas import AllBetsSchema
 
@@ -31,4 +32,9 @@ class AccountSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class ReadBetsRequest(BaseModel):
+    read_bets: List[Dict]
+    login: str
 

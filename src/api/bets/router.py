@@ -6,7 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.db.database import get_async_session
 from src.db.querries import create_new_bet, get_bets_per_acc
-from .schemas import BetSchema
+from .schemas import BetSchema, ReadBetsRequest
+from .utils import match_bets
 
 
 logging.basicConfig(level=logging.INFO)
@@ -39,7 +40,13 @@ async def get_accs_bets(login: str, session: AsyncSession = Depends(get_async_se
 
 
 @router.post("/read_bets/", status_code=status.HTTP_200_OK)
-async def get_read_bets(read_bets: List[dict], login: str, session: AsyncSession = Depends(get_async_session)):
-    print(read_bets)
-    bets = await get_bets_per_acc(session, login)
-    return {"read_bets": read_bets}
+async def get_read_bets(request_data: ReadBetsRequest, session: AsyncSession = Depends(get_async_session)):
+    try:
+        if len(request_data.read_bets) == 0 or len(request_data.login) == 0:
+            raise HTTPException(status_code=400, detail=f"Wrong data input")
+        bets = await get_bets_per_acc(session, request_data.login)
+        result = await match_bets(request_data.read_bets, bets)
+        return {"read_bets": len(result)}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Failed to match bets")
