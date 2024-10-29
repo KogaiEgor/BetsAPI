@@ -58,6 +58,12 @@ async def _get_or_create_account(session: AsyncSession, login: str):
         return new_account.id
 
 
+async def get_bets_per_acc(session: AsyncSession, login: str):
+    acc_id = await _get_or_create_account(session, login)
+    print(acc_id)
+
+    bets = await session.execute(select(BetModel).filter(BetModel.acc_id == acc_id))
+    return bets.scalars().all()
 
 
 
