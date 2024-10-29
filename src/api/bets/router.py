@@ -1,4 +1,5 @@
 import logging
+from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -38,6 +39,7 @@ async def get_accs_bets(login: str, session: AsyncSession = Depends(get_async_se
 
 
 @router.post("/read_bets/", status_code=status.HTTP_200_OK)
-async def get_read_bets(bets: list, session: AsyncSession = Depends(get_async_session)):
-    print(bets)
-    return {"read_bets": bets}
+async def get_read_bets(read_bets: List[dict], login: str, session: AsyncSession = Depends(get_async_session)):
+    print(read_bets)
+    bets = await get_bets_per_acc(session, login)
+    return {"read_bets": read_bets}
