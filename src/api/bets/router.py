@@ -37,3 +37,7 @@ async def get_accs_bets(login: str, session: AsyncSession = Depends(get_async_se
 
 
 
+@router.post("/read_bets/", status_code=status.HTTP_200_OK)
+async def get_read_bets(bets: list, session: AsyncSession = Depends(get_async_session)):
+    print(bets)
+    return {"read_bets": bets}
