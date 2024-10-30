@@ -18,7 +18,7 @@ class BetModel(Base):
     pre_koef = Column(Float)
     acc_id = Column(Integer, ForeignKey("Accounts.id", ondelete='CASCADE'))
     account = relationship("AccountModel", back_populates="bets")
-    parsed_bet = relationship("ParsedBetModel", back_populates="bets")
+    parsed_bet = relationship("ParsedBetModel", back_populates="bets", uselist=False)
     arb_or_value_percent = Column(Float)
     balance = Column(Float)
     name = Column(String)
@@ -29,7 +29,7 @@ class ParsedBetModel(Base):
 
     id = Column(Integer, primary_key=True)
     amount_return = Column(Float)
-    bets = relationship("BetModel", back_populates="parsed_bet")
+    bets = relationship("BetModel", back_populates="parsed_bet", uselist=False)
     account = relationship("AccountModel", back_populates="parsed_bets")
     acc_id = Column(Integer, ForeignKey("Accounts.id", ondelete='CASCADE'))
     bet_id = Column(Integer, ForeignKey("Bets.id", ondelete='CASCADE'))
