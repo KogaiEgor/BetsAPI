@@ -17,8 +17,11 @@ router = APIRouter(
 @router.post("/add_allbets/", status_code=status.HTTP_201_CREATED)
 async def create_allbets(bet_data: AllBetsSchema, session: AsyncSession = Depends(get_async_session)):
     try:
-        await create_new_allbet(session=session, bet_data=bet_data.dict())
-        return JSONResponse(content={"msg": "Allbet succesfully added to db"})
+        allbet = await create_new_allbet(session=session, bet_data=bet_data.dict())
+        return {
+            "id": allbet.id,
+            "msg": "Allbet succesfully added to db"
+        }
     except Exception as e:
         logging.error(f"Error creating bet: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to create allbet")

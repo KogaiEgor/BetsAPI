@@ -20,7 +20,10 @@ router = APIRouter(
 async def create_bet(bet_data: BetSchema, session: AsyncSession = Depends(get_async_session)):
     try:
         new_bet = await create_new_bet(session, bet_data.dict())
-        return {"id": new_bet.id}
+        return {
+            "id": new_bet.id,
+            "msg": "Bet succesfully added to db"
+        }
     except Exception as e:
         logger.error(f"Error creating bet: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to create bet")
