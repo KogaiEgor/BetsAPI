@@ -70,11 +70,7 @@ async def _get_or_create_account(session: AsyncSession, login: str):
         return new_account.id
 
 
-async def get_bets_per_acc(session: AsyncSession, login: str):
-    logger.debug(f"Fetching bets for account with login '{login}'")
-    acc_id = await _get_or_create_account(session, login)
-    logger.debug(f"Account ID for login '{login}' is {acc_id}")
-
+async def get_bets_per_acc(session: AsyncSession, acc_id: int):
     bets = await session.execute(select(BetModel).filter(BetModel.acc_id == acc_id))
     bets_list = bets.scalars().all()
     logger.info(f"Total bets found: {len(bets_list)} for account {acc_id}")
