@@ -14,7 +14,7 @@ ASYNC_DB = os.getenv("DATABASE_URL_ASYNC")
 MAIN_DB = os.getenv("MAIN_DB_URL")
 
 # Создание соединения с базой данных
-engine = create_async_engine(ASYNC_DB, echo=True)
+engine = create_async_engine(ASYNC_DB, echo=False)
 mapper_registry = registry()
 Base = mapper_registry.generate_base()
 
