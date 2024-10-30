@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from src.logger import logger
 
 
-async def match_bets(read_bets: list, bets: list):
+async def match_bets(read_bets: list, bets: list, acc_id: int):
     logger.info(f"Read {len(read_bets)}, found in db {len(bets)}")
     result = []
     count = 0
@@ -15,6 +15,7 @@ async def match_bets(read_bets: list, bets: list):
             if abs((t - t2).total_seconds()) <= 10:
                 bet_id = bet.id
                 read_bet['bet_id'] = bet_id
+                read_bet['acc_id'] = acc_id
                 result.append(read_bet)
                 logger.debug("Bets matched")
                 count += 1

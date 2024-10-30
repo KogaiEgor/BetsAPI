@@ -5,7 +5,7 @@ from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.db.database import get_async_session
-from src.db.querries import create_new_bet, get_bets_per_acc
+from src.db.querries import create_new_bet, get_bets_per_acc, _get_or_create_account
 from .schemas import BetSchema, ReadBetsRequest
 from .utils import match_bets
 
@@ -46,8 +46,9 @@ async def get_read_bets(request_data: ReadBetsRequest, session: AsyncSession = D
     try:
         if len(request_data.read_bets) == 0 or len(request_data.login) == 0:
             raise HTTPException(status_code=400, detail=f"Wrong data input")
-        bets = await get_bets_per_acc(session, request_data.login)
-        result = await match_bets(request_data.read_bets, bets)
+        acc_id = await _get_or_create_account(session, request_data.login)
+        bets = await get_bets_per_acc(session, acc_id)
+        result = await match_bets(request_data.read_bets, bets, acc_id)
         return {"read_bets": len(result)}
     except Exception as e:
         print(e)
