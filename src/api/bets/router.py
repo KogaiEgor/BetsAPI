@@ -1,4 +1,4 @@
-import logging
+from src.logger import logger
 from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException
 
@@ -10,12 +10,11 @@ from .schemas import BetSchema, ReadBetsRequest
 from .utils import match_bets
 
 
-logging.basicConfig(level=logging.INFO)
+
 router = APIRouter(
     prefix="/bets",
     tags=["Bets"]
 )
-
 
 @router.post("/add_bet/", status_code=status.HTTP_201_CREATED)
 async def create_bet(bet_data: BetSchema, session: AsyncSession = Depends(get_async_session)):
@@ -23,7 +22,7 @@ async def create_bet(bet_data: BetSchema, session: AsyncSession = Depends(get_as
         new_bet = await create_new_bet(session, bet_data.dict())
         return {"id": new_bet.id}
     except Exception as e:
-        logging.error(f"Error creating bet: {str(e)}")
+        logger.error(f"Error creating bet: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to create bet")
 
 
@@ -34,7 +33,7 @@ async def get_accs_bets(login: str, session: AsyncSession = Depends(get_async_se
         print(bets)
         return {"read_bets": bets}
     except Exception as e:
-        logging.error(f"Error creating bet: {str(e)}")
+        logger.error(f"Error creating bet: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to get bets for acc {login}")
 
 
