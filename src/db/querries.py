@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from src.logger import logger
-from src.api.bets.model import BetModel, AccountModel
+from src.api.bets.model import BetModel, AccountModel, ParsedBetModel
 from src.api.allbets.model import AllBets
 
 
@@ -77,5 +77,27 @@ async def get_bets_per_acc(session: AsyncSession, acc_id: int):
 
     return bets_list
 
+
+async def create_parsed_bets(session: AsyncSession, parsed_bets: list):
+    logger.info("Starting creation of parsed bets")
+
+    for parsed_bet_data in parsed_bets:
+        acc_id = parsed_bet_data.get('acc_id')
+        bet_id = parsed_bet_data.get('bet_id')
+
+        new_parsed_bet = ParsedBetModel(
+            market=parsed_bet_data['market'],
+            odd=parsed_bet_data['odd'],
+            stake=parsed_bet_data['stake'],
+            amount_return=parsed_bet_data.get('stake_return'),
+            acc_id=acc_id,
+            bet_id=bet_id
+        )
+
+        session.add(new_parsed_bet)
+        logger.debug(f"Parsed bet created")
+
+    await session.commit()
+    logger.info("Parsed bets created successfully")
 
 
