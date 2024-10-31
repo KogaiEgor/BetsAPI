@@ -28,6 +28,8 @@ class ParsedBetModel(Base):
     __tablename__ = 'ParsedBets'
 
     id = Column(Integer, primary_key=True)
+    market = Column(String)
+    odd = Column(Float)
     amount_return = Column(Float)
     bets = relationship("BetModel", back_populates="parsed_bet", uselist=False)
     account = relationship("AccountModel", back_populates="parsed_bets")
@@ -42,7 +44,7 @@ class AccountModel(Base):
     login = Column(String)
     bets = relationship("BetModel", back_populates="account")
     allbets = relationship("AllBets", back_populates="account")
-    parsed_bets = relationship("ParsedBetsModel", back_populates="account")
+    parsed_bets = relationship("ParsedBetModel", back_populates="account")
 
 
 
