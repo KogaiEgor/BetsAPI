@@ -10,6 +10,8 @@ class BetSchema(BaseModel):
     id: Optional[int]
     bet_datetime: Optional[datetime]
     market: Optional[str]
+    sport: Optional[str]
+    league: Optional[str]
     arb_or_value: Optional[str]
     amount: Optional[float]
     koef: Optional[float]

@@ -15,6 +15,8 @@ async def create_new_bet(session: AsyncSession, bet_data: dict):
         new_bet = BetModel(
             bet_datetime=bet_data['bet_datetime'],
             market=bet_data['market'],
+            sport=bet_data['sport'],
+            league=bet_data['sport'],
             arb_or_value=bet_data['arb_or_value'],
             amount=bet_data['amount'],
             koef=bet_data['koef'],
