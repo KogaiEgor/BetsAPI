@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.db.database import Base, DATABASE_URL, TEST_DB
+from src.db.database import Base, DATABASE_URL
 from src.api.allbets import model
 from src.api.bets import model
 
