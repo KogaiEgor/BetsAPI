@@ -11,6 +11,8 @@ class BetModel(Base):
     id = Column(Integer, primary_key=True)
     bet_datetime = Column(DateTime)
     market = Column(String)
+    sport = Column(String)
+    league = Column(String)
     arb_or_value = Column(String)
     amount = Column(Float)
     koef = Column(Float)
