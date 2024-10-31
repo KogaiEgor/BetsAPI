@@ -30,11 +30,12 @@ class ParsedBetModel(Base):
     id = Column(Integer, primary_key=True)
     market = Column(String)
     odd = Column(Float)
+    stake = Column(Float)
     amount_return = Column(Float)
-    bets = relationship("BetModel", back_populates="parsed_bet", uselist=False)
-    account = relationship("AccountModel", back_populates="parsed_bets")
-    acc_id = Column(Integer, ForeignKey("Accounts.id", ondelete='CASCADE'))
-    bet_id = Column(Integer, ForeignKey("Bets.id", ondelete='CASCADE'))
+    bets = relationship("BetModel", back_populates="parsed_bet", uselist=False, passive_deletes=True)
+    account = relationship("AccountModel", back_populates="parsed_bets", passive_deletes=True)
+    acc_id = Column(Integer, ForeignKey("Accounts.id", ondelete='CASCADE'), nullable=True)
+    bet_id = Column(Integer, ForeignKey("Bets.id", ondelete='CASCADE'), nullable=True)
 
 
 class AccountModel(Base):
